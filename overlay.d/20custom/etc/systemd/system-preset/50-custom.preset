@@ -1,5 +1,6 @@
+enable systemd-networkd.service
+enable systemd-resolved.service
 enable kea-dhcp4.service
-# enable matchbox.service
 enable libvirtd.service
 enable ksm.service
 enable ksmtuned.service

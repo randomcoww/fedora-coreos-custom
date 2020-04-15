@@ -3,8 +3,8 @@
 # core functionality.
 
 include:
-  - fedora-coreos-config/manifests/ignition-and-ostree.yaml
-  - fedora-coreos-config/manifests/file-transfer.yaml
+  - manifests/ignition-and-ostree.yaml
+  - manifests/file-transfer.yaml
 
 initramfs-args:
   - --no-hostonly
@@ -34,10 +34,10 @@ etc-group-members:
 
 check-passwd:
   type: "file"
-  filename: "passwd"
+  filename: "manifests/passwd"
 check-groups:
   type: "file"
-  filename: "group"
+  filename: "manifests/group"
 
 default-target: multi-user.target
 
@@ -169,3 +169,4 @@ exclude-packages:
   # Let's make sure initscripts doesn't get pulled back in
   # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
   - initscripts
+  - NetworkManager
