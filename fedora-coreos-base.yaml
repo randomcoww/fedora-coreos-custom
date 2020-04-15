@@ -1,0 +1,171 @@
+# This file is most of a Fedora CoreOS like system; it inherits from "core".
+# Add things in this file which are somewhat "opinionated", not necessarily
+# core functionality.
+
+include:
+  - fedora-coreos-config/manifests/ignition-and-ostree.yaml
+  - fedora-coreos-config/manifests/file-transfer.yaml
+
+initramfs-args:
+  - --no-hostonly
+  # We don't support root on NFS, so we don't need it in the initramfs. It also
+  # conflicts with /var mount support in ignition because NFS tries to mount stuff
+  # in /var/ and then ignition can't cleanly unmount it. For example:
+  # https://github.com/dracutdevs/dracut/blob/1856ae95c873a6fe855b3dccd0144f1a96b9e71c/modules.d/95nfs/nfs-start-rpc.sh#L7
+  # See also discussion in https://github.com/coreos/fedora-coreos-config/pull/60
+  - --omit=nfs
+  # Omit these since we don't use them
+  - --omit=lvm
+  - --omit=multipath
+  - --omit=iscsi
+
+# Be minimal
+recommends: false
+
+ignore-removed-users:
+  - root
+ignore-removed-groups:
+  - root
+etc-group-members:
+  - wheel
+  - sudo
+  - systemd-journal
+  - adm
+
+check-passwd:
+  type: "file"
+  filename: "passwd"
+check-groups:
+  type: "file"
+  filename: "group"
+
+default-target: multi-user.target
+
+remove-from-packages:
+
+remove-files:
+  # We don't ship man(1) or info(1)
+  - usr/share/info
+  - usr/share/man
+  # Drop text docs too
+  - usr/share/doc
+
+
+# ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
+# See also the version of this in fedora-coreos.yaml
+postprocess:
+  # This will be dropped once rpm-ostree because module-aware.
+  # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
+  # https://github.com/projectatomic/rpm-ostree/issues/1435
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    for x in /etc/yum.repos.d/*modular.repo; do
+      sed -i -e 's,enabled=[01],enabled=0,' ${x}
+    done
+  # Read the Ignition 2 and Afterburn SSH key fragments, pending better tooling
+  # https://github.com/coreos/fedora-coreos-tracker/issues/139
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
+    echo -e '\n# Read authorized_keys fragments written by Ignition and Afterburn\nAuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys.d/ignition .ssh/authorized_keys.d/afterburn' >> /etc/ssh/sshd_config
+
+  # Enable SELinux booleans used by OpenShift
+  # https://github.com/coreos/fedora-coreos-tracker/issues/284
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    setsebool -P -N container_use_cephfs on  # RHBZ#1692369
+    setsebool -P -N virt_use_samba on  # RHBZ#1754825
+
+packages:
+  # Security
+  - selinux-policy-targeted
+  - polkit
+  # System setup
+  - afterburn
+  - afterburn-dracut
+  - passwd
+  # SSH
+  - openssh-server openssh-clients
+  # Containers
+  - podman skopeo runc systemd-container
+  - fuse-overlayfs slirp4netns
+  # Remote IPC for podman
+  - libvarlink-util
+  # Networking
+  - nfs-utils-coreos
+  - iproute-tc
+  - adcli
+  # Static firewalling
+  - iptables nftables iptables-nft iptables-services
+  # Storage
+  - cloud-utils-growpart
+  - lvm2 iscsi-initiator-utils sg3_utils
+  - device-mapper-multipath
+  - xfsprogs e2fsprogs btrfs-progs mdadm
+  - cryptsetup
+  # Time sync
+  - chrony
+  # Allow communication between sudo and SSSD 
+  # for caching sudo rules by SSSD.
+  # https://github.com/coreos/fedora-coreos-tracker/issues/445
+  - libsss_sudo
+  # Extra runtime
+  - sssd shadow-utils
+  # There are things that write outside of the journal still (such as the classic wtmp, etc.)
+  # (auditd also writes outside the journal but it has its own log rotation.)
+  # Anything package layered will also tend to expect files dropped in
+  # /etc/logrotate.d to work.  Really, this is a legacy thing, but if we don't
+  # have it then people's disks will slowly fill up with logs.
+  - logrotate
+  # Used by admins interactively
+  - sudo coreutils attr less tar xz gzip bzip2
+  - socat net-tools bind-utils
+  - bash-completion
+  - openssl
+  - vim-minimal
+  - lsof
+  # file-transfer: note fuse-sshfs is not in RHEL
+  # so we can't put it in file-transfer.yaml
+  - fuse-sshfs
+  # User experience
+  - console-login-helper-messages-issuegen
+  - console-login-helper-messages-motdgen
+  - console-login-helper-messages-profile
+  - toolbox
+  # CoreOS Installer
+  - coreos-installer coreos-installer-systemd
+  # i18n
+  - kbd
+  # Parsing/Interacting with JSON data
+  - jq
+
+# This thing is crying out to be pulled into systemd, but that hasn't happened
+# yet.  Also we may want to add to rpm-ostree something like arch negation;
+# basically right now it doesn't exist on s390x.
+# Anyways, it was requested by the Red Hat perf team for RHCOS, so we have it here.
+# https://serverfault.com/questions/513807/is-there-still-a-use-for-irqbalance-on-modern-hardware
+# https://access.redhat.com/solutions/41535
+packages-x86_64:
+  - irqbalance
+packages-ppc64le:
+  - irqbalance
+packages-aarch64:
+  - irqbalance
+
+# Things we don't expect to ship on the host.  We currently
+# have recommends: false so these could only come in via
+# hard requirement, in which case the build will fail.
+exclude-packages:
+  - python
+  - python2
+  - perl
+  - nodejs
+  - dnf
+  - grubby
+  - cowsay  # Just in case
+  # Let's make sure initscripts doesn't get pulled back in
+  # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
+  - initscripts

@@ -1,0 +1,10 @@
+[Match]
+Name=int-dummy
+
+[Link]
+ARP=no
+
+[Network]
+LinkLocalAddressing=no
+DHCP=no
+Bridge=en-int

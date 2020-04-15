@@ -1,0 +1,18 @@
+[Unit]
+Description=CoreOS Matchbox
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/matchbox \\
+  -address=192.168.224.1:80 \\
+  -rpc-address=0.0.0.0:58081 \\
+  -ca-file=/etc/ssl/certs/matchbox-ca.pem \\
+  -cert-file=/etc/ssl/certs/matchbox.pem \\
+  -key-file=/etc/ssl/certs/matchbox-key.pem \\
+  -data-path=/var/lib/matchbox/data \\
+  -assets-path=/var/lib/matchbox/assets
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

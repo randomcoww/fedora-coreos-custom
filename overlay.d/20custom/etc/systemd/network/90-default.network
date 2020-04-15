@@ -1,0 +1,9 @@
+[Match]
+Name=en*
+
+[Link]
+ARP=no
+
+[Network]
+LinkLocalAddressing=no
+DHCP=yes

@@ -1,5 +1,6 @@
 ref: fedora/${basearch}/coreos/testing-devel
-include: fedora-coreos-config/manifests/fedora-coreos.yaml
+include:
+ - fedora-coreos.yaml
 
 releasever: "31"
 
@@ -30,3 +31,30 @@ postprocess:
     mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/163\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/90-disable-on-non-production-stream.toml
     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/163\nupdates.enabled = false' > /etc/zincati/config.d/90-disable-on-non-production-stream.toml
+  # Install Flatcar images
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    mkdir -p /var/lib/matchbox/assets
+    pushd /var/lib/matchbox/assets
+    curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe.vmlinuz
+    curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe_image.cpio.gz
+    popd
+  # Install matchbox
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    curl -o matchbox.tar.gz \
+    -LO https://github.com/poseidon/matchbox/releases/download/v0.8.3/matchbox-v0.8.3-linux-amd64.tar.gz
+    tar xzf matchbox.tar.gz --strip 1 -C /usr/local/bin/ */matchbox
+    rm -f matchbox.tar.gz
+  # Enable systemd-resolved
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+packages:
+  - libvirt-daemon-kvm
+  - ksmtuned
+  - kea

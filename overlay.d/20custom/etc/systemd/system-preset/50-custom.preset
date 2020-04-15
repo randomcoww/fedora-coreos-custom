@@ -1,0 +1,5 @@
+enable kea-dhcp4.service
+# enable matchbox.service
+enable libvirtd.service
+enable ksm.service
+enable ksmtuned.service
