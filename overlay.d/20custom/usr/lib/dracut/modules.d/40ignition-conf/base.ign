@@ -1,0 +1,23 @@
+{
+  "ignition": {
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "cert-authority ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBADTSGB0t9y4e4nVpREo+V5jytqMKkOOUJnYTKYbm2XN2HPK01zFOJHHNqmu7uBFKNpOmRIMgi+o3CilfbQfQZ80swDjZnvsOB3Rmca6dzIJdq0P89B8A7GRGq4zDEITtBVdP7WYQveKd5z7HM3oQk7wRX0lO8AoWQvNOs+3FtW+g3PG7Q=="
+        ],
+        "gecos": "CoreOS Admin",
+        "groups": [
+          "adm",
+          "sudo",
+          "systemd-journal",
+          "wheel",
+          "libvirt"
+        ]
+      }
+    ]
+  }
+}

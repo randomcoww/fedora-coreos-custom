@@ -1,0 +1,6 @@
+[NetDev]
+Name=en-store
+Kind=vlan
+
+[VLAN]
+Id=1

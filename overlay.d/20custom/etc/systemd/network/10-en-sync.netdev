@@ -1,0 +1,6 @@
+[NetDev]
+Name=en-sync
+Kind=vlan
+
+[VLAN]
+Id=60

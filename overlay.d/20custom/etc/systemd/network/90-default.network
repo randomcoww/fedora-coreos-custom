@@ -6,4 +6,4 @@ ARP=no
 
 [Network]
 LinkLocalAddressing=no
-DHCP=yes
+DHCP=no

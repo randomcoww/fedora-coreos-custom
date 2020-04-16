@@ -41,3 +41,8 @@ packages:
   - libvirt-daemon-kvm
   - ksmtuned
   - kea
+
+add-files:
+  - [artifacts/matchbox, /usr/local/bin/matchbox]
+  - [artifacts/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
+  - [artifacts/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]

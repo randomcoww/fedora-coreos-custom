@@ -1,0 +1,14 @@
+[Match]
+Name=en-store
+MACAddress=00-1b-21-bc-4c-16
+
+[Link]
+ARP=yes
+MTUBytes=9000
+
+[Network]
+LinkLocalAddressing=no
+DHCP=yes
+
+[Address]
+Address=192.168.127.251/23
