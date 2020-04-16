@@ -33,11 +33,9 @@ etc-group-members:
   - adm
 
 check-passwd:
-  type: "file"
-  filename: "manifests/passwd"
+  type: "none"
 check-groups:
-  type: "file"
-  filename: "manifests/group"
+  type: "none"
 
 default-target: multi-user.target
 
