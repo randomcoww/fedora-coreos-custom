@@ -17,7 +17,7 @@ cosa() {
    rc=$?; set +x; return $rc
 }
 
-cosa init <repo>
+cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 cosa fetch
 cosa build
 cosa buildextend-live
