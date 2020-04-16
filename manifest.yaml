@@ -29,6 +29,13 @@ postprocess:
     set -xeuo pipefail
     ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
+etc-group-members:
+  # Add the docker group to /etc/group
+  # https://github.com/coreos/fedora-coreos-tracker/issues/2
+  # This will be no longer needed when systemd-sysusers has been implemented:
+  # https://github.com/projectatomic/rpm-ostree/issues/49
+  - libvirt
+
 packages:
   - libvirt-daemon-kvm
   - ksmtuned
@@ -38,3 +45,4 @@ add-files:
   - [artifacts/matchbox, /usr/bin/matchbox]
   - [artifacts/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
   - [artifacts/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]
+  - [artifacts/SAS9300_8i_IT.bin, /var/lib/libvirt/boot/SAS9300_8i_IT.bin]

@@ -16,7 +16,6 @@ etc-group-members:
   # https://github.com/coreos/fedora-coreos-tracker/issues/2
   # This will be no longer needed when systemd-sysusers has been implemented:
   # https://github.com/projectatomic/rpm-ostree/issues/49
-  libvirt
 
 # XXX: this is used by coreos-assembler for artifact naming...
 rojig:
