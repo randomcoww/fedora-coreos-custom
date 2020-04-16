@@ -10,14 +10,13 @@ mutate-os-release: "${releasever}"
 packages:
   - fedora-release-coreos
   - fedora-repos-ostree
-  # Updates
-  - zincati
 
 etc-group-members:
   # Add the docker group to /etc/group
   # https://github.com/coreos/fedora-coreos-tracker/issues/2
   # This will be no longer needed when systemd-sysusers has been implemented:
   # https://github.com/projectatomic/rpm-ostree/issues/49
+  libvirt
 
 # XXX: this is used by coreos-assembler for artifact naming...
 rojig:
@@ -28,17 +27,6 @@ rojig:
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos-base.yaml
 postprocess:
-  # Disable Zincati and fedora-coreos-pinger on non-release builds
-  # https://github.com/coreos/fedora-coreos-tracker/issues/212
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    source /etc/os-release
-    if [[ $OSTREE_VERSION = *.dev* ]]; then
-      mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
-      echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/95-disable-on-dev.toml
-      echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nupdates.enabled = false' > /etc/zincati/config.d/95-disable-on-dev.toml
-    fi
   # Disable SSH password logins by default
   # Move to overlay once sshd_config fragments are supported
   # https://github.com/coreos/fedora-coreos-tracker/issues/138
