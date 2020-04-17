@@ -1,6 +1,5 @@
 enable systemd-networkd.service
 enable systemd-resolved.service
-disable systemd-networkd-wait-online.service
 enable kea-dhcp4.service
 enable libvirtd.service
 enable ksm.service
