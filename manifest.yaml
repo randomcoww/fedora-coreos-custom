@@ -41,13 +41,8 @@ packages:
   - ksmtuned
   - kea
 
-units:
-  - systemd-networkd.service
-  - systemd-resolved.service
-  - libvirtd.service
-
 add-files:
-  - [artifacts/matchbox.tgz, /var/opt/container-save/matchbox.tgz]
+  - [artifacts/matchbox.tgz, /etc/container-save/matchbox.tgz]
   - [artifacts/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
   - [artifacts/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]
   - [artifacts/SAS9300_8i_IT.bin, /etc/libvirt/boot/SAS9300_8i_IT.bin]
