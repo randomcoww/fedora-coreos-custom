@@ -1,6 +1,0 @@
-[NetDev]
-Name=int-tap
-Kind=macvtap
-
-[MACVTAP]
-Mode=bridge

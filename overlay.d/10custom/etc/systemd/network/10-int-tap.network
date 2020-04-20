@@ -1,9 +1,0 @@
-[Match]
-Name=int-tap
-
-[Network]
-LinkLocalAddressing=no
-DHCP=no
-
-[Address]
-Address=192.168.224.1/23

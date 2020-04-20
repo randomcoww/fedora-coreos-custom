@@ -1,6 +1,0 @@
-[NetDev]
-Name=en-lan
-Kind=vlan
-
-[VLAN]
-Id=90

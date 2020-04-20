@@ -1,6 +1,0 @@
-[NetDev]
-Name=en-wan
-Kind=vlan
-
-[VLAN]
-Id=30
