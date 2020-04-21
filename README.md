@@ -17,9 +17,21 @@ cosa() {
    rc=$?; set +x; return $rc
 }
 
-cosa shell
-sudo cosa init https://github.com/randomcoww/fedora-coreos-custom.git
-sudo cosa fetch
-sudo cosa build
-sudo cosa buildextend-live
+cosa init https://github.com/randomcoww/fedora-coreos-custom.git
+
+## Add ignition file
+curl http://127.0.0.1:8080/ignition?ign=kvm-0 | jq '.ignition.version = "3.0.0"' | tee src/config/overlay.d/10custom/usr/lib/dracut/modules.d/40ignition-conf/base.ign
+
+## Add matchbox image
+podman pull quay.io/poseidon/matchbox:latest
+podman save --format oci-archive -o matchbox.tar quay.io/poseidon/matchbox:latest
+cp matchbox.tar src/config/archive
+
+## Add flatcar images
+pushd src/config/archive
+curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe.vmlinuz
+curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe_image.cpio.gz
+popd
+
+cosa fetch && cosa build && cosa buildextend-live
 ```
