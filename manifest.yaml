@@ -1,6 +1,6 @@
 ref: fedora/${basearch}/coreos/testing-devel
 include:
- - fedora-coreos-override.yaml
+ - fedora-coreos-custom.yaml
 
 releasever: "31"
 
