@@ -33,5 +33,5 @@ curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_produc
 curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe_image.cpio.gz
 popd
 
-cosa fetch && cosa build && cosa buildextend-live
+cosa clean && cosa fetch && cosa build && cosa buildextend-live
 ```
