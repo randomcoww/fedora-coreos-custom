@@ -22,13 +22,6 @@ repos:
 add-commit-metadata:
   fedora-coreos.stream: testing-devel
 
-postprocess:
-  # Enable systemd-resolved
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-
 etc-group-members:
   # Add the docker group to /etc/group
   # https://github.com/coreos/fedora-coreos-tracker/issues/2

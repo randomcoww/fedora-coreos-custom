@@ -6,6 +6,9 @@ include:
   - manifests/ignition-and-ostree.yaml
   - manifests/file-transfer.yaml
 
+automatic-version-prefix: "${releasever}.<date:%Y%m%d>.dev"
+mutate-os-release: "${releasever}"
+
 initramfs-args:
   - --no-hostonly
   # We don't support root on NFS, so we don't need it in the initramfs. It also
@@ -31,6 +34,11 @@ etc-group-members:
   - sudo
   - systemd-journal
   - adm
+  # Add the docker group to /etc/group
+  # https://github.com/coreos/fedora-coreos-tracker/issues/2
+  # This will be no longer needed when systemd-sysusers has been implemented:
+  # https://github.com/projectatomic/rpm-ostree/issues/49
+  # - docker
 
 check-passwd:
   type: "file"
@@ -41,8 +49,6 @@ check-groups:
 
 default-target: multi-user.target
 
-remove-from-packages:
-
 remove-files:
   # We don't ship man(1) or info(1)
   - usr/share/info
@@ -50,10 +56,45 @@ remove-files:
   # Drop text docs too
   - usr/share/doc
 
-
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos.yaml
 postprocess:
+  # # Disable Zincati and fedora-coreos-pinger on non-release builds
+  # # https://github.com/coreos/fedora-coreos-tracker/issues/212
+  # - |
+  #   #!/usr/bin/env bash
+  #   set -xeuo pipefail
+  #   source /etc/os-release
+  #   if [[ $OSTREE_VERSION = *.dev* ]]; then
+  #     mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
+  #     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/95-disable-on-dev.toml
+  #     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nupdates.enabled = false' > /etc/zincati/config.d/95-disable-on-dev.toml
+  #   fi
+  # Disable SSH password logins by default
+  # Move to overlay once sshd_config fragments are supported
+  # https://github.com/coreos/fedora-coreos-tracker/issues/138
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    sed -Ei 's/^(PasswordAuthentication|PermitRootLogin)[[:blank:]]/#&/' /etc/ssh/sshd_config
+    echo -e '\n# Disable password logins by default\nPasswordAuthentication no\nPermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
+  # Users shouldn't be configuring `rpm-ostreed.conf`
+  # https://github.com/coreos/fedora-coreos-tracker/issues/271
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    cat > /tmp/rpm-ostreed.conf << 'EOF'
+    # By default, this system has its OS updates managed by
+    # `zincati.service`.  Changes made to this file may
+    # conflict with the configuation of `zincati.service`.
+    # See https://github.com/coreos/zincati for additional
+    # information.
+
+    EOF
+    cat /usr/etc/rpm-ostreed.conf >> /tmp/rpm-ostreed.conf
+    cp /tmp/rpm-ostreed.conf /usr/etc/rpm-ostreed.conf
+    rm /tmp/rpm-ostreed.conf
+
   # This will be dropped once rpm-ostree because module-aware.
   # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
   # https://github.com/projectatomic/rpm-ostree/issues/1435
@@ -71,7 +112,34 @@ postprocess:
     sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
     echo -e '\n# Read authorized_keys fragments written by Ignition and Afterburn\nAuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys.d/ignition .ssh/authorized_keys.d/afterburn' >> /etc/ssh/sshd_config
 
+  # # Enable SELinux booleans used by OpenShift
+  # # https://github.com/coreos/fedora-coreos-tracker/issues/284
+  # - |
+  #   #!/usr/bin/env bash
+  #   set -xeuo pipefail
+  #   setsebool -P -N container_use_cephfs on  # RHBZ#1692369
+  #   setsebool -P -N virt_use_samba on  # RHBZ#1754825
+
+  # Enable systemd-resolved
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+remove-from-packages:
+  # Drop NetworkManager support for ifcfg files, see also corresponding
+  # overlay.d/14NetworkManager-plugins
+  # - [NetworkManager, /usr/lib64/NetworkManager/.*/libnm-settings-plugin-ifcfg-rh.so]
+
 packages:
+  - fedora-release-coreos
+  - fedora-repos-ostree
+  # # CL ships this.
+  # - moby-engine
+  # # User metrics
+  # - fedora-coreos-pinger
+  # Updates
+  - zincati
   # Security
   - selinux-policy-targeted
   - polkit
@@ -88,16 +156,22 @@ packages:
   - libvarlink-util
   # Networking
   - nfs-utils-coreos
+  # - NetworkManager hostname
   - iproute-tc
   - adcli
+  ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
+  # - NetworkManager-team teamd
   # Static firewalling
   - iptables nftables iptables-nft iptables-services
+  # Interactive Networking configuration during coreos-install
+  # - NetworkManager-tui
   # Storage
   - cloud-utils-growpart
   - lvm2 iscsi-initiator-utils sg3_utils
   - device-mapper-multipath
   - xfsprogs e2fsprogs btrfs-progs mdadm
   - cryptsetup
+  # - cifs-utils
   # Time sync
   - chrony
   # Allow communication between sudo and SSSD 
@@ -128,7 +202,7 @@ packages:
   - console-login-helper-messages-profile
   - toolbox
   # CoreOS Installer
-  - coreos-installer coreos-installer-systemd
+  # - coreos-installer coreos-installer-systemd
   # i18n
   - kbd
   # Parsing/Interacting with JSON data
