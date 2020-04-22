@@ -24,7 +24,8 @@ curl http://127.0.0.1:8080/ignition?ign=kvm-0 | jq '.ignition.version = "3.0.0"'
 
 ## Add matchbox image
 podman pull quay.io/poseidon/matchbox:latest
-podman save --format oci-archive quay.io/poseidon/matchbox:latest | sudo tee src/config/resources/matchbox.tar
+podman save --format oci-archive -o matchbox.tar quay.io/poseidon/matchbox:latest
+sudo mv matchbox.tar src/config/resources
 
 ## Add flatcar images
 pushd src/config/resources
