@@ -20,7 +20,7 @@ cosa() {
 cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 
 ## Add ignition file
-curl http://127.0.0.1:8080/ignition?ign=kvm-0 | jq '.ignition.version = "3.0.0"' | sudo tee src/config/resources/base.ign
+curl http://127.0.0.1:8080/ignition?ign=kvm-0 | jq '.ignition.version = "3.0.0"' | sudo tee src/config/overlay.d/10custom/usr/lib/dracut/modules.d/40ignition-conf/base.ign
 
 ## Add matchbox image
 podman pull quay.io/poseidon/matchbox:latest
