@@ -1,0 +1,29 @@
+{
+  "ignition": {
+    "version": "3.0.0"
+  },
+  "systemd": {
+    "units": [
+      {
+        "enabled": false,
+        "mask": true,
+        "name":" systemd-networkd-wait-online.service"
+      }
+    ]
+  },
+  "passwd": {
+    "users": [
+      {
+        "gecos": "CoreOS Admin",
+        "groups": [
+          "adm",
+          "sudo",
+          "systemd-journal",
+          "wheel",
+          "libvirt"
+        ],
+        "name": "core"
+      }
+    ]
+  }
+}

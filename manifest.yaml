@@ -35,7 +35,7 @@ packages:
   - kea
 
 add-files:
-  - [artifacts/matchbox.tar, /etc/container-save/matchbox.tar]
-  - [artifacts/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
-  - [artifacts/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]
-  - [artifacts/SAS9300_8i_IT.bin, /etc/libvirt/boot/SAS9300_8i_IT.bin]
+  - [resources/matchbox.tar, /etc/container-save/matchbox.tar]
+  - [resources/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
+  - [resources/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]
+  - [resources/SAS9300_8i_IT.bin, /etc/libvirt/boot/SAS9300_8i_IT.bin]
