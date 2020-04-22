@@ -10,8 +10,7 @@
           "adm",
           "sudo",
           "systemd-journal",
-          "wheel",
-          "libvirt"
+          "wheel"
         ],
         "name": "core"
       }
