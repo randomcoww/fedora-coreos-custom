@@ -19,17 +19,24 @@ cosa() {
 cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 ```
 
-Build KVM hypervisor image
-```
-pushd src/config
-sudo ln -s manifest-kvm.yaml manifest.yaml
-popd
-```
-
 Build container VM image
 ```
 pushd src/config
 sudo ln -s manifest-containerd.yaml manifest.yaml
+popd
+
+cosa clean && cosa fetch && cosa build && cosa buildextend-live
+
+cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
+   src/config/resources/fedora-coreos-live-kernel
+cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-initramfs.x86_64.img \
+   src/config/resources/fedora-coreos-live-initramfs.img
+```
+
+Build KVM hypervisor image
+```
+pushd src/config
+sudo ln -s manifest-kvm.yaml manifest.yaml
 popd
 ```
 
@@ -44,14 +51,6 @@ Add matchbox image
 podman pull quay.io/poseidon/matchbox:latest
 podman save --format oci-archive -o matchbox.tar quay.io/poseidon/matchbox:latest
 sudo mv matchbox.tar src/config/resources
-```
-
-Add Flatcar Linux images
-```
-pushd src/config/resources
-sudo curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe.vmlinuz
-sudo curl -LO https://edge.release.flatcar-linux.net/amd64-usr/current/flatcar_production_pxe_image.cpio.gz
-popd
 ```
 
 Run build
