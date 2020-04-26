@@ -22,7 +22,7 @@ cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 Build container VM image
 ```
 pushd src/config
-sudo ln -s manifest-containerd.yaml manifest.yaml
+sudo ln -sf manifest-containerd.yaml manifest.yaml
 popd
 
 cosa clean && cosa fetch && cosa build && cosa buildextend-live
@@ -36,7 +36,7 @@ cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-initramfs.x86_64.img \
 Build KVM hypervisor image
 ```
 pushd src/config
-sudo ln -s manifest-kvm.yaml manifest.yaml
+sudo ln -sf manifest-kvm.yaml manifest.yaml
 popd
 ```
 
