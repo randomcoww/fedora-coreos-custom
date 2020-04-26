@@ -136,6 +136,7 @@ packages:
   - fedora-repos-ostree
   # # CL ships this.
   # - moby-engine
+  - containerd
   # # User metrics
   # - fedora-coreos-pinger
   # Updates

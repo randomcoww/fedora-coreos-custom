@@ -1,7 +1,6 @@
 # fedora-coreos-custom
 
 From upstream: https://github.com/coreos/coreos-assembler
-
 ```
 cosa() {
    env | grep COREOS_ASSEMBLER
@@ -18,6 +17,20 @@ cosa() {
 }
 
 cosa init https://github.com/randomcoww/fedora-coreos-custom.git
+```
+
+Build KVM hypervisor image
+```
+pushd src/config
+sudo ln -s manifest-kvm.yaml manifest.yaml
+popd
+```
+
+Build container VM image
+```
+pushd src/config
+sudo ln -s manifest-containerd.yaml manifest.yaml
+popd
 ```
 
 Add ignition file from https://github.com/randomcoww/terraform-infra 

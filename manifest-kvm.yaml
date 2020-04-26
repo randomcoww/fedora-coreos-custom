@@ -1,0 +1,41 @@
+ref: fedora/${basearch}/coreos/testing-devel
+include:
+ - fedora-coreos-custom-base.yaml
+
+releasever: "31"
+
+rojig:
+  license: MIT
+  name: fedora-coreos
+  summary: Fedora CoreOS testing-devel
+
+repos:
+  - fedora-coreos-pool
+  # these repos are there to make it easier to add new packages to the OS and to
+  # use `cosa fetch --update-lockfile`; but note that all package versions are
+  # still pinned
+  - fedora
+  - fedora-updates
+  - fedora-modular
+  - fedora-updates-modular
+
+add-commit-metadata:
+  fedora-coreos.stream: testing-devel
+
+etc-group-members:
+  # Add the docker group to /etc/group
+  # https://github.com/coreos/fedora-coreos-tracker/issues/2
+  # This will be no longer needed when systemd-sysusers has been implemented:
+  # https://github.com/projectatomic/rpm-ostree/issues/49
+  - libvirt
+
+packages:
+  - libvirt-daemon-kvm
+  - ksmtuned
+  - kea
+
+add-files:
+  - [resources/matchbox.tar, /etc/container-save/matchbox.tar]
+  - [resources/flatcar_production_pxe.vmlinuz, /etc/matchbox/assets/flatcar_production_pxe.vmlinuz]
+  - [resources/flatcar_production_pxe_image.cpio.gz, /etc/matchbox/assets/flatcar_production_pxe_image.cpio.gz]
+  - [resources/SAS9300_8i_IT.bin, /etc/libvirt/boot/SAS9300_8i_IT.bin]
