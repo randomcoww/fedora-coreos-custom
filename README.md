@@ -23,7 +23,6 @@ cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 Add ignition file from https://github.com/randomcoww/terraform-infra 
 ```
 curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
-   | jq '.ignition.version = "3.0.0"' \
    | sudo tee src/config/overlay.d/10custom/usr/lib/dracut/modules.d/40ignition-conf/base.ign
 ```
 
