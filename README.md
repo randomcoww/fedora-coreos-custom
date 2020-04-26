@@ -27,9 +27,9 @@ popd
 
 cosa clean && cosa fetch && cosa build && cosa buildextend-live
 
-cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
+sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
    src/config/resources/fedora-coreos-live-kernel
-cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-initramfs.x86_64.img \
+sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-initramfs.x86_64.img \
    src/config/resources/fedora-coreos-live-initramfs.img
 ```
 
