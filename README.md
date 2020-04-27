@@ -21,10 +21,6 @@ cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 
 Build container VM image
 ```
-pushd src/config
-sudo ln -sf manifest-containerd.yaml manifest.yaml
-popd
-
 cosa clean && cosa fetch && cosa build && cosa buildextend-live
 
 sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
