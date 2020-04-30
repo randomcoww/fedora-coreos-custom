@@ -129,7 +129,7 @@ postprocess:
 remove-from-packages:
   # Drop NetworkManager support for ifcfg files, see also corresponding
   # overlay.d/14NetworkManager-plugins
-  # - [NetworkManager, /usr/lib64/NetworkManager/.*/libnm-settings-plugin-ifcfg-rh.so]
+  - [NetworkManager, /usr/lib64/NetworkManager/.*/libnm-settings-plugin-ifcfg-rh.so]
 
 packages:
   - fedora-release-coreos
@@ -137,6 +137,7 @@ packages:
   # # CL ships this.
   # - moby-engine
   - containerd
+  - cri-tools
   # # User metrics
   # - fedora-coreos-pinger
   # Updates
@@ -157,7 +158,7 @@ packages:
   - libvarlink-util
   # Networking
   - nfs-utils-coreos
-  # - NetworkManager hostname
+  - NetworkManager hostname
   - iproute-tc
   - adcli
   ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
@@ -228,6 +229,7 @@ packages-aarch64:
 exclude-packages:
   - python
   - python2
+  # - python3
   - perl
   - nodejs
   - dnf
@@ -236,4 +238,3 @@ exclude-packages:
   # Let's make sure initscripts doesn't get pulled back in
   # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
   - initscripts
-  - NetworkManager
