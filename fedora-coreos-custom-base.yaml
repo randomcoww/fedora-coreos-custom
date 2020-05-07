@@ -177,6 +177,7 @@ packages:
   - toolbox
   # CoreOS Installer
   # - coreos-installer coreos-installer-systemd
+  - coreos-installer
   # i18n
   - kbd
   # Parsing/Interacting with JSON data
