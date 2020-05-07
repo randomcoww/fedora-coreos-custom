@@ -30,7 +30,7 @@ cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 
 Build container VM image
 ```
-cosa clean && cosa fetch && cosa build && cosa buildextend-live
+cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
 
 sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
    src/config/resources/fedora-coreos-live-kernel
@@ -60,5 +60,5 @@ sudo mv matchbox.tar src/config/resources
 
 Run build
 ```
-cosa clean && cosa fetch && cosa build && cosa buildextend-live
+cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
 ```
