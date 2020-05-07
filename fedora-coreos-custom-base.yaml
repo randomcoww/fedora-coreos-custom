@@ -167,6 +167,7 @@ packages:
   - openssl
   - vim-minimal
   - lsof
+  - ipvsadm
   # file-transfer: note fuse-sshfs is not in RHEL
   # so we can't put it in file-transfer.yaml
   - fuse-sshfs
