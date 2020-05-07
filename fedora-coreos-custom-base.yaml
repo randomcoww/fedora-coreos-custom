@@ -34,11 +34,6 @@ etc-group-members:
   - sudo
   - systemd-journal
   - adm
-  # Add the docker group to /etc/group
-  # https://github.com/coreos/fedora-coreos-tracker/issues/2
-  # This will be no longer needed when systemd-sysusers has been implemented:
-  # https://github.com/projectatomic/rpm-ostree/issues/49
-  # - docker
 
 check-passwd:
   type: "file"
@@ -59,25 +54,6 @@ remove-files:
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos.yaml
 postprocess:
-  # # Disable Zincati and fedora-coreos-pinger on non-release builds
-  # # https://github.com/coreos/fedora-coreos-tracker/issues/212
-  # - |
-  #   #!/usr/bin/env bash
-  #   set -xeuo pipefail
-  #   source /etc/os-release
-  #   if [[ $OSTREE_VERSION = *.dev* ]]; then
-  #     mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
-  #     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/95-disable-on-dev.toml
-  #     echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nupdates.enabled = false' > /etc/zincati/config.d/95-disable-on-dev.toml
-  #   fi
-  # Disable SSH password logins by default
-  # Move to overlay once sshd_config fragments are supported
-  # https://github.com/coreos/fedora-coreos-tracker/issues/138
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    sed -Ei 's/^(PasswordAuthentication|PermitRootLogin)[[:blank:]]/#&/' /etc/ssh/sshd_config
-    echo -e '\n# Disable password logins by default\nPasswordAuthentication no\nPermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
   # Users shouldn't be configuring `rpm-ostreed.conf`
   # https://github.com/coreos/fedora-coreos-tracker/issues/271
   - |
@@ -104,21 +80,15 @@ postprocess:
     for x in /etc/yum.repos.d/*modular.repo; do
       sed -i -e 's,enabled=[01],enabled=0,' ${x}
     done
-  # Read the Ignition 2 and Afterburn SSH key fragments, pending better tooling
+
+  # Disable the default-enabled AuthorizedKeysFile directive so we can
+  # override it in a config fragment
   # https://github.com/coreos/fedora-coreos-tracker/issues/139
+  # https://bugzilla.redhat.com/1824913
   - |
     #!/usr/bin/env bash
     set -xeuo pipefail
     sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
-    echo -e '\n# Read authorized_keys fragments written by Ignition and Afterburn\nAuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys.d/ignition .ssh/authorized_keys.d/afterburn' >> /etc/ssh/sshd_config
-
-  # # Enable SELinux booleans used by OpenShift
-  # # https://github.com/coreos/fedora-coreos-tracker/issues/284
-  # - |
-  #   #!/usr/bin/env bash
-  #   set -xeuo pipefail
-  #   setsebool -P -N container_use_cephfs on  # RHBZ#1692369
-  #   setsebool -P -N virt_use_samba on  # RHBZ#1754825
 
   # Enable systemd-resolved
   - |
@@ -162,9 +132,10 @@ packages:
   - iproute-tc
   - adcli
   ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
-  # - NetworkManager-team teamd
+  - NetworkManager-team teamd
   # Static firewalling
-  - iptables nftables iptables-nft iptables-services
+  # - iptables nftables iptables-nft iptables-services
+  - nftables iptables-nft
   # Interactive Networking configuration during coreos-install
   # - NetworkManager-tui
   # Storage
@@ -190,7 +161,8 @@ packages:
   - logrotate
   # Used by admins interactively
   - sudo coreutils attr less tar xz gzip bzip2
-  - socat net-tools bind-utils
+  # - socat net-tools bind-utils
+  - socat net-tools ldns-utils
   - bash-completion
   - openssl
   - vim-minimal

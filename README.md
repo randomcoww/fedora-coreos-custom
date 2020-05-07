@@ -1,6 +1,15 @@
 # fedora-coreos-custom
 
+#### Update from upstream
+
+```
+git submodule foreach git pull origin testing-devel
+```
+
+#### Build image
+
 From upstream: https://github.com/coreos/coreos-assembler
+
 ```
 cosa() {
    env | grep COREOS_ASSEMBLER
