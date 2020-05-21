@@ -19,5 +19,8 @@ repos:
   - fedora-modular
   - fedora-updates-modular
 
+packages:
+  - keepalived
+
 add-commit-metadata:
   fedora-coreos.stream: testing-devel
