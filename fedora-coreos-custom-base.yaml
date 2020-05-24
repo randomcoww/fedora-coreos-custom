@@ -212,3 +212,8 @@ exclude-packages:
   # Let's make sure initscripts doesn't get pulled back in
   # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
   - initscripts
+
+arch-include:
+  x86_64: manifests/grub2-removals.yaml
+  aarch64: manifests/grub2-removals.yaml
+  ppc64le: manifests/grub2-removals.yaml
