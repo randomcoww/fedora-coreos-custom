@@ -4,6 +4,8 @@
 
 From upstream: https://github.com/coreos/coreos-assembler
 
+Currently use coreos-assembler v0.8.0 https://github.com/coreos/fedora-coreos-tracker/issues/496
+
 ```
 cosa() {
    env | grep COREOS_ASSEMBLER
