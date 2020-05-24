@@ -54,5 +54,6 @@ sudo mv matchbox.tar src/config/resources
 
 Run build
 ```
-cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
+cosa clean && cosa fetch && cosa build metal
+cosa buildextend-live
 ```
