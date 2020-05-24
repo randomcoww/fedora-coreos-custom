@@ -1,4 +1,4 @@
-ref: fedora/${basearch}/coreos/testing-devel
+ref: fedora/${basearch}/coreos/next
 include:
  - fedora-coreos-custom-base.yaml
 
@@ -7,7 +7,7 @@ releasever: "32"
 rojig:
   license: MIT
   name: fedora-coreos
-  summary: Fedora CoreOS testing-devel
+  summary: Fedora CoreOS next
 
 repos:
   - fedora-coreos-pool
@@ -23,4 +23,4 @@ packages:
   - keepalived
 
 add-commit-metadata:
-  fedora-coreos.stream: testing-devel
+  fedora-coreos.stream: next

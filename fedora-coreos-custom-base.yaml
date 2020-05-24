@@ -175,7 +175,7 @@ packages:
   - console-login-helper-messages-issuegen
   - console-login-helper-messages-motdgen
   - console-login-helper-messages-profile
-  - toolbox
+  # - toolbox
   # CoreOS Installer
   # - coreos-installer coreos-installer-systemd
   - coreos-installer
