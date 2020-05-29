@@ -20,7 +20,10 @@ cosa() {
               ${COREOS_ASSEMBLER_CONTAINER:-quay.io/coreos-assembler/coreos-assembler:v0.8.0} "$@"
    rc=$?; set +x; return $rc
 }
+```
 
+Check out config
+```
 cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 ```
 
