@@ -41,12 +41,6 @@ sudo ln -sf manifest-kvm.yaml manifest.yaml
 popd
 ```
 
-Add ignition file from https://github.com/randomcoww/terraform-infra 
-```
-curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
-   | sudo tee src/config/overlay.d/10custom/usr/lib/dracut/modules.d/40ignition-conf/base.ign
-```
-
 Add matchbox image
 ```
 podman pull quay.io/poseidon/matchbox:latest
@@ -58,4 +52,14 @@ Run build
 ```
 cosa clean && cosa fetch && cosa build metal
 cosa buildextend-live
+```
+
+Embed ignition from https://github.com/randomcoww/terraform-infra
+```
+curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
+  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*.dev.0-live.x86_64.iso -o kvm-0.iso
+
+
+curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
+  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*.dev.0-live.x86_64.iso -o kvm-1.iso
 ```
