@@ -28,6 +28,7 @@ cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 ```
 
 Add matchbox image
+This host has no internet access and cannot download containers
 ```
 podman pull quay.io/poseidon/matchbox:latest
 podman save --format oci-archive -o matchbox.tar quay.io/poseidon/matchbox:latest
