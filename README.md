@@ -27,23 +27,6 @@ Check out config
 cosa init https://github.com/randomcoww/fedora-coreos-custom.git
 ```
 
-Build container VM image
-```
-cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
-
-sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-kernel-x86_64 \
-   src/config/resources/fedora-coreos-live-kernel
-sudo cp builds/latest/x86_64/fedora-coreos-*.dev.0-live-initramfs.x86_64.img \
-   src/config/resources/fedora-coreos-live-initramfs.img
-```
-
-Build KVM hypervisor image
-```
-pushd src/config
-sudo ln -sf manifest-kvm.yaml manifest.yaml
-popd
-```
-
 Add matchbox image
 ```
 podman pull quay.io/poseidon/matchbox:latest
@@ -53,16 +36,24 @@ sudo mv matchbox.tar src/config/resources
 
 Run build
 ```
-cosa clean && cosa fetch && cosa build metal
-cosa buildextend-live
+cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
 ```
 
 Embed ignition from https://github.com/randomcoww/terraform-infra
 ```
 curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
-  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*.dev.0-live.x86_64.iso -o kvm-0.iso
+  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-0.iso
 
 
 curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
-  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*.dev.0-live.x86_64.iso -o kvm-1.iso
+  | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-1.iso
+```
+
+Write to disk
+```
+curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
+  | sudo coreos-installer iso embed /dev/sdb --force
+
+curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
+  | sudo coreos-installer iso embed /dev/sdb --force
 ```
