@@ -37,9 +37,14 @@ initramfs-args:
   - --omit=lvm
   - --omit=multipath
   - --omit=iscsi
+  - --add-drivers=vfio
+  - --add-drivers=vfio_iommu_type1
+  - --add-drivers=vfio_pci
+  - --add-drivers=vfio_virqfd
 
 # Be minimal
 recommends: false
+boot_location: new
 
 ignore-removed-users:
   - root
