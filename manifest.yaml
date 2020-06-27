@@ -44,7 +44,6 @@ initramfs-args:
 
 # Be minimal
 recommends: false
-boot_location: new
 
 ignore-removed-users:
   - root
