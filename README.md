@@ -34,7 +34,7 @@ sudo mv matchbox.tar src/config/resources
 
 Run build
 ```
-cosa clean && cosa fetch && cosa build metal && cosa buildextend-live
+cosa clean && cosa fetch && cosa build metal && cosa buildextend-live --no-pxe
 ```
 
 Embed ignition from https://github.com/randomcoww/terraform-infra
