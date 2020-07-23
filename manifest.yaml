@@ -75,42 +75,6 @@ remove-files:
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos.yaml
 postprocess:
-  # Users shouldn't be configuring `rpm-ostreed.conf`
-  # https://github.com/coreos/fedora-coreos-tracker/issues/271
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    cat > /tmp/rpm-ostreed.conf << 'EOF'
-    # By default, this system has its OS updates managed by
-    # `zincati.service`.  Changes made to this file may
-    # conflict with the configuation of `zincati.service`.
-    # See https://github.com/coreos/zincati for additional
-    # information.
-
-    EOF
-    cat /usr/etc/rpm-ostreed.conf >> /tmp/rpm-ostreed.conf
-    cp /tmp/rpm-ostreed.conf /usr/etc/rpm-ostreed.conf
-    rm /tmp/rpm-ostreed.conf
-
-  # This will be dropped once rpm-ostree because module-aware.
-  # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
-  # https://github.com/projectatomic/rpm-ostree/issues/1435
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    for x in /etc/yum.repos.d/*modular.repo; do
-      sed -i -e 's,enabled=[01],enabled=0,' ${x}
-    done
-
-  # Disable the default-enabled AuthorizedKeysFile directive so we can
-  # override it in a config fragment
-  # https://github.com/coreos/fedora-coreos-tracker/issues/139
-  # https://bugzilla.redhat.com/1824913
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    sed -i 's/^AuthorizedKeysFile[[:blank:]]/#&/' /etc/ssh/sshd_config
-
   # Enable systemd-resolved
   - |
     #!/usr/bin/env bash
@@ -132,7 +96,7 @@ packages:
   # # User metrics
   # - fedora-coreos-pinger
   # Updates
-  - zincati
+  # - zincati
   # Security
   - selinux-policy-targeted
   - polkit
@@ -183,7 +147,7 @@ packages:
   # Used by admins interactively
   - sudo coreutils attr less tar xz gzip bzip2
   # - socat net-tools bind-utils
-  - socat net-tools ldns-utils
+  - socat ldns-utils
   - bash-completion
   - openssl
   - vim-minimal
@@ -194,8 +158,8 @@ packages:
   - fuse-sshfs
   # User experience
   - console-login-helper-messages-issuegen
-  - console-login-helper-messages-motdgen
-  - console-login-helper-messages-profile
+  # - console-login-helper-messages-motdgen
+  # - console-login-helper-messages-profile
   # - toolbox
   # CoreOS Installer
   # - coreos-installer coreos-installer-systemd
@@ -205,11 +169,9 @@ packages:
   # Parsing/Interacting with JSON data
   - jq
   ## Custom
-  - hdparm lm_sensors
+  - hdparm lm_sensors ipmitool
   - libvirt-daemon-kvm
-  - ksmtuned
-  - kea
-  - keepalived
+  - kea keepalived
 
 # This thing is crying out to be pulled into systemd, but that hasn't happened
 # yet.  Also we may want to add to rpm-ostree something like arch negation;
@@ -230,7 +192,7 @@ packages-aarch64:
 exclude-packages:
   - python
   - python2
-  # - python3
+  - python3
   - perl
   - nodejs
   - dnf
