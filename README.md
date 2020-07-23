@@ -46,7 +46,6 @@ Embed ignition from https://github.com/randomcoww/terraform-infra
 curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
   | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-0.iso
 
-
 curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
   | sudo coreos-installer iso embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-1.iso
 ```

@@ -168,8 +168,8 @@ packages:
   - kbd
   # Parsing/Interacting with JSON data
   - jq
-  ## Custom
-  - hdparm lm_sensors ipmitool
+  # Custom
+  - hdparm
   - libvirt-daemon-kvm
   - kea keepalived
 
@@ -192,7 +192,7 @@ packages-aarch64:
 exclude-packages:
   - python
   - python2
-  - python3
+  # - python3
   - perl
   - nodejs
   - dnf
