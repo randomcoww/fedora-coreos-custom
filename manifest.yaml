@@ -103,7 +103,7 @@ packages:
   # Remote IPC for podman
   - libvarlink-util
   # Networking
-  - nfs-utils-coreos
+  # - nfs-utils-coreos
   - NetworkManager hostname
   - iproute-tc
   - adcli
