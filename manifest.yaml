@@ -95,10 +95,13 @@ packages:
   - afterburn
   - afterburn-dracut
   - passwd
+  # Dependency of 20live dracut module
+  - bsdtar
   # SSH
   - openssh-server openssh-clients
+  - ssh-key-dir
   # Containers
-  - podman skopeo runc systemd-container
+  - podman skopeo runc systemd-container catatonit
   - fuse-overlayfs slirp4netns
   # Remote IPC for podman
   - libvarlink-util
@@ -114,6 +117,8 @@ packages:
   - nftables iptables-nft
   # Interactive Networking configuration during coreos-install
   # - NetworkManager-tui
+  # WireGuard https://github.com/coreos/fedora-coreos-tracker/issues/362
+  - wireguard-tools
   # Storage
   - cloud-utils-growpart
   - lvm2 iscsi-initiator-utils sg3_utils
@@ -143,7 +148,6 @@ packages:
   - openssl
   - vim-minimal
   - lsof
-  - ipvsadm
   # file-transfer: note fuse-sshfs is not in RHEL
   # so we can't put it in file-transfer.yaml
   - fuse-sshfs
@@ -153,16 +157,17 @@ packages:
   # - console-login-helper-messages-profile
   # - toolbox
   # CoreOS Installer
-  # - coreos-installer coreos-installer-systemd
-  - coreos-installer
+  - coreos-installer coreos-installer-bootinfra
   # i18n
   - kbd
   # Parsing/Interacting with JSON data
   - jq
+  # nvme-cli for managing nvme disks
+  - nvme-cli
   # Custom
-  - hdparm nvme-cli
   - libvirt-daemon-kvm
   - kea keepalived
+  - ipvsadm
 
 # This thing is crying out to be pulled into systemd, but that hasn't happened
 # yet.  Also we may want to add to rpm-ostree something like arch negation;
