@@ -21,8 +21,6 @@ repos:
   - fedora-updates
   - fedora-modular
   - fedora-updates-modular
-
-lockfile-repos:
   - fedora-coreos-pool
 
 add-commit-metadata:
