@@ -38,7 +38,7 @@ cosa clean && \
 cosa fetch && \
 cosa build metal4k && \
 cosa buildextend-metal && \
-cosa buildextend-live --no-pxe
+cosa buildextend-live
 ```
 
 Embed ignition from https://github.com/randomcoww/terraform-infra
