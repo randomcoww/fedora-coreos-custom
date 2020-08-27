@@ -1,29 +1,32 @@
 # This file is most of a Fedora CoreOS like system; it inherits from "core".
 # Add things in this file which are somewhat "opinionated", not necessarily
 # core functionality.
-ref: fedora/${basearch}/coreos/next
+ref: fedora/${basearch}/coreos/testing-devel
 include:
   - manifests/ignition-and-ostree.yaml
   - manifests/file-transfer.yaml
 
 releasever: "32"
+
 rojig:
   license: MIT
   name: fedora-coreos
-  summary: Fedora CoreOS next
+  summary: Fedora CoreOS testing-devel
 
 automatic-version-prefix: "${releasever}"
 mutate-os-release: "${releasever}"
 
 repos:
-  - fedora-coreos-pool
   - fedora
   - fedora-updates
   - fedora-modular
   - fedora-updates-modular
 
+lockfile-repos:
+  - fedora-coreos-pool
+
 add-commit-metadata:
-  fedora-coreos.stream: next
+  fedora-coreos.stream: testing-devel
 
 initramfs-args:
   - --no-hostonly
@@ -81,13 +84,7 @@ packages:
   - fedora-release-coreos
   - fedora-repos-ostree
   # # CL ships this.
-  # - moby-engine
-  - containerd
-  - cri-tools
-  # # User metrics
-  # - fedora-coreos-pinger
-  # Updates
-  # - zincati
+  - containerd cri-tools
   # Security
   - selinux-policy-targeted
   - polkit
@@ -95,37 +92,29 @@ packages:
   - afterburn
   - afterburn-dracut
   - passwd
-  # Dependency of 20live dracut module
-  - bsdtar
   # SSH
   - openssh-server openssh-clients
-  - ssh-key-dir
   # Containers
   - podman skopeo runc systemd-container catatonit
   - fuse-overlayfs slirp4netns
   # Remote IPC for podman
   - libvarlink-util
   # Networking
-  # - nfs-utils-coreos
   - NetworkManager hostname
   - iproute-tc
   - adcli
   ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
   - NetworkManager-team teamd
   # Static firewalling
-  # - iptables nftables iptables-nft iptables-services
   - nftables iptables-nft
   # Interactive Networking configuration during coreos-install
   # - NetworkManager-tui
-  # WireGuard https://github.com/coreos/fedora-coreos-tracker/issues/362
-  - wireguard-tools
   # Storage
   - cloud-utils-growpart
   - lvm2 iscsi-initiator-utils sg3_utils
   - device-mapper-multipath
   - xfsprogs e2fsprogs btrfs-progs mdadm
   - cryptsetup
-  # - cifs-utils
   # Time sync
   - chrony
   # Allow communication between sudo and SSSD 
@@ -142,12 +131,12 @@ packages:
   - logrotate
   # Used by admins interactively
   - sudo coreutils attr less tar xz gzip bzip2
-  # - socat net-tools bind-utils
   - socat ldns-utils
   - bash-completion
   - openssl
   - vim-minimal
   - lsof
+  - ipvsadm
   # file-transfer: note fuse-sshfs is not in RHEL
   # so we can't put it in file-transfer.yaml
   - fuse-sshfs
@@ -157,7 +146,7 @@ packages:
   # - console-login-helper-messages-profile
   # - toolbox
   # CoreOS Installer
-  - coreos-installer coreos-installer-bootinfra
+  - coreos-installer
   # i18n
   - kbd
   # Parsing/Interacting with JSON data
@@ -167,7 +156,6 @@ packages:
   # Custom
   - libvirt-daemon-kvm
   - kea keepalived
-  - ipvsadm
 
 # This thing is crying out to be pulled into systemd, but that hasn't happened
 # yet.  Also we may want to add to rpm-ostree something like arch negation;

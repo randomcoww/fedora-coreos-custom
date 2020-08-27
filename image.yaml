@@ -17,8 +17,7 @@ extra-kargs:
     - video=efifb:off
     - rd.driver.pre=vfio-pci
 
-# Disable networking by default on firstboot. We can drop this once cosa stops
-# defaulting to `ip=dhcp,dhcp6 rd.neednet=1` when it doesn't see this key.
+# Kernel arguments to be used on first-boot.
 ignition-network-kcmdline: []
 
 # Optional remote by which to prefix the deployed OSTree ref
