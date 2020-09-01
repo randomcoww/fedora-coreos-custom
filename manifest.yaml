@@ -89,8 +89,7 @@ packages:
   # Dependency of 20live dracut module
   - bsdtar
   # SSH
-  - openssh-server openssh-clients
-  - ssh-key-dir
+  - openssh-server
   # Containers
   - podman skopeo runc systemd-container catatonit
   - fuse-overlayfs slirp4netns
