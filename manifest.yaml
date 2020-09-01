@@ -50,7 +50,6 @@ ignore-removed-users:
 ignore-removed-groups:
   - root
 etc-group-members:
-  - wheel
   - sudo
   - systemd-journal
   - adm
