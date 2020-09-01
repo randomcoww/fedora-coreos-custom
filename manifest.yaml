@@ -4,7 +4,6 @@
 ref: fedora/${basearch}/coreos/testing-devel
 include:
   - manifests/ignition-and-ostree.yaml
-  - manifests/file-transfer.yaml
 
 releasever: "32"
 
@@ -87,8 +86,6 @@ packages:
   - selinux-policy-targeted
   - polkit
   # System setup
-  - afterburn
-  - afterburn-dracut
   - passwd
   # Dependency of 20live dracut module
   - bsdtar
@@ -103,15 +100,8 @@ packages:
   # Networking
   - NetworkManager hostname
   - iproute-tc
-  - adcli
-  ## Teaming https://github.com/coreos/fedora-coreos-config/pull/289 and http://bugzilla.redhat.com/1758162
-  - NetworkManager-team teamd
   # Static firewalling
   - nftables iptables-nft
-  # Interactive Networking configuration during coreos-install
-  # - NetworkManager-tui
-  # WireGuard https://github.com/coreos/fedora-coreos-tracker/issues/362
-  - wireguard-tools
   # Storage
   - cloud-utils-growpart
   - lvm2 iscsi-initiator-utils sg3_utils
@@ -120,7 +110,7 @@ packages:
   - cryptsetup
   # Time sync
   - chrony
-  # Allow communication between sudo and SSSD 
+  # Allow communication between sudo and SSSD
   # for caching sudo rules by SSSD.
   # https://github.com/coreos/fedora-coreos-tracker/issues/445
   - libsss_sudo
@@ -139,15 +129,6 @@ packages:
   - openssl
   - vim-minimal
   - lsof
-  - ipvsadm
-  # file-transfer: note fuse-sshfs is not in RHEL
-  # so we can't put it in file-transfer.yaml
-  - fuse-sshfs
-  # User experience
-  - console-login-helper-messages-issuegen
-  # - console-login-helper-messages-motdgen
-  # - console-login-helper-messages-profile
-  # - toolbox
   # CoreOS Installer
   - coreos-installer coreos-installer-bootinfra
   # i18n
