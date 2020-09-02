@@ -54,6 +54,7 @@ etc-group-members:
   - systemd-journal
   - adm
   - libvirt
+  - wheel
 
 check-passwd:
   type: "file"
