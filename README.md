@@ -41,20 +41,17 @@ cosa buildextend-metal && \
 cosa buildextend-live
 ```
 
-Embed ignition from https://github.com/randomcoww/terraform-infra
+Embed ignition from https://github.com/randomcoww/terraform-infra generated under `outputs/ignition`
 ```
-curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
-  | sudo coreos-installer iso ignition embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-0.iso
-
-curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
-  | sudo coreos-installer iso ignition embed builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso -o kvm-1.iso
+coreos-installer iso ignition embed \
+  -i <ignition_file> \
+  -o kvm.iso \
+  builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso
 ```
 
 Write to disk
 ```
-curl http://127.0.0.1:8080/ignition?ign=kvm-0 \
-  | sudo coreos-installer iso ignition embed /dev/sdb --force
-
-curl http://127.0.0.1:8080/ignition?ign=kvm-1 \
-  | sudo coreos-installer iso ignition embed /dev/sdb --force
+sudo coreos-installer iso ignition embed \
+  -i <ignition_file> \
+  /dev/sdb --force
 ```
