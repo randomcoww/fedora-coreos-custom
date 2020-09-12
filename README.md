@@ -43,8 +43,8 @@ cosa buildextend-live
 
 Embed ignition from https://github.com/randomcoww/terraform-infra generated under `outputs/ignition`
 ```
-coreos-installer iso ignition embed \
-  -i <ignition_file> \
+sudo coreos-installer iso ignition embed \
+  -i ../terraform-infra/resourcesv2/output/ignition/kvm-0.ign \
   -o kvm.iso \
   builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso
 ```
@@ -52,6 +52,6 @@ coreos-installer iso ignition embed \
 Write to disk
 ```
 sudo coreos-installer iso ignition embed \
-  -i <ignition_file> \
+  -i ../terraform-infra/resourcesv2/output/ignition/kvm-0.ign \
   /dev/sdb --force
 ```
