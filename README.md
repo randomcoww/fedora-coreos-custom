@@ -45,13 +45,12 @@ Embed ignition from https://github.com/randomcoww/terraform-infra generated unde
 ```
 sudo coreos-installer iso ignition embed \
   -i ../terraform-infra/resourcesv2/output/ignition/kvm-0.ign \
-  -o kvm.iso \
+  -o kvm-0.iso \
+  builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso
+
+sudo coreos-installer iso ignition embed \
+  -i ../terraform-infra/resourcesv2/output/ignition/kvm-1.ign \
+  -o kvm-1.iso \
   builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso
 ```
-
-Write to disk
-```
-sudo coreos-installer iso ignition embed \
-  -i ../terraform-infra/resourcesv2/output/ignition/kvm-0.ign \
-  /dev/sdb --force
-```
+Write kvm-*.iso to disk
