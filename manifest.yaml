@@ -72,11 +72,6 @@ remove-files:
   # Drop text docs too
   - usr/share/doc
 
-remove-from-packages:
-  # Drop NetworkManager support for ifcfg files, see also corresponding
-  # overlay.d/14NetworkManager-plugins
-  - [NetworkManager, /usr/lib64/NetworkManager/.*/libnm-settings-plugin-ifcfg-rh.so]
-
 packages:
   - fedora-release-coreos
   - fedora-repos-ostree
@@ -90,14 +85,14 @@ packages:
   # Dependency of 20live dracut module
   - bsdtar
   # SSH
-  - openssh-server
+  - openssh-server openssh-clients
   # Containers
   - podman skopeo runc systemd-container catatonit
   - fuse-overlayfs slirp4netns
   # Remote IPC for podman
   - libvarlink-util
   # Networking
-  - NetworkManager hostname
+  - hostname
   - iproute-tc
   # Static firewalling
   - nftables iptables-nft
@@ -168,6 +163,8 @@ exclude-packages:
   # Let's make sure initscripts doesn't get pulled back in
   # https://github.com/coreos/fedora-coreos-tracker/issues/220#issuecomment-611566254
   - initscripts
+  # Custom - replace with systemd-networkd
+  - NetworkManager
 
 arch-include:
   x86_64: manifests/grub2-removals.yaml
