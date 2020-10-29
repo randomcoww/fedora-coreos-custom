@@ -54,3 +54,15 @@ sudo coreos-installer iso ignition embed \
   builds/latest/x86_64/fedora-coreos-*-live.x86_64.iso
 ```
 Write kvm-*.iso to disk
+
+Write to existing device
+
+```
+sudo coreos-installer iso ignition embed \
+  -i ../terraform-infra/resourcesv2/output/ignition/kvm-0.ign \
+  /dev/sdb --force
+
+sudo coreos-installer iso ignition embed \
+  -i ../terraform-infra/resourcesv2/output/ignition/kvm-1.ign \
+  /dev/sdb --force
+```
