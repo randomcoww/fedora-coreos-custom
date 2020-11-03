@@ -134,6 +134,7 @@ packages:
   # Custom
   - libvirt-daemon-kvm
   - kea keepalived
+  - qemu-guest-agent
 
 # This thing is crying out to be pulled into systemd, but that hasn't happened
 # yet.  Also we may want to add to rpm-ostree something like arch negation;
