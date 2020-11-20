@@ -135,6 +135,7 @@ packages:
   # https://github.com/coreos/fedora-coreos-tracker/issues/509
   - zram-generator
   # Custom
+  - systemd-networkd
   - libvirt-daemon-kvm
   - kea keepalived
   - qemu-guest-agent
