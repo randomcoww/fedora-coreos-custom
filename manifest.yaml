@@ -5,7 +5,7 @@ ref: fedora/${basearch}/coreos/testing-devel
 include:
   - manifests/ignition-and-ostree.yaml
 
-releasever: "32"
+releasever: "33"
 
 rojig:
   license: MIT
@@ -131,6 +131,9 @@ packages:
   - jq
   # nvme-cli for managing nvme disks
   - nvme-cli
+  # zram-generator (but not zram-generator-defaults) for F33 change
+  # https://github.com/coreos/fedora-coreos-tracker/issues/509
+  - zram-generator
   # Custom
   - libvirt-daemon-kvm
   - kea keepalived
